@@ -13,8 +13,10 @@ namespace Game10003
     {
         // Place your variables here:
         // Variables for the colours of the shapes
-        Vector2 position;
-        float radius = 35;
+        Vector2 position = new Vector2(200, 350);
+        float radius = 50;
+        Vector2 velocity;
+        Vector2 forceOfGravity = new Vector2(0, 10);
 
         /// <summary>
         ///     Setup runs once before the game loop begins.
@@ -26,24 +28,6 @@ namespace Game10003
             Window.SetSize(800, 600);
         }
 
-        void GetPlayerInput()
-        {
-
-            Vector2 input = Vector2.Zero;
-
-            if (Input.IsKeyboardKeyDown(KeyboardInput.Up))
-            {
-                input.Y -= 1 + 1;
-            }
-
-            if (Input.IsKeyboardKeyDown(KeyboardInput.Down))
-            {
-                input.Y += 1 + 1;
-            }
-
-            Input = input;
-        }
-
         /// <summary>
         ///     Update runs every frame.
         /// </summary>
@@ -52,11 +36,31 @@ namespace Game10003
             // Change background colour to selected background colour
             Window.ClearBackground(Color.OffWhite);
 
-            position += Input * 100 * Time.DeltaTime;
 
+            // Allows the player to control the cube's jump
+            if (Input.IsMouseButtonPressed(MouseInput.Left))
+            {
+                velocity.Y = -5;
+            }
+
+            // Prevents the cube from sinking through the bottom of the screen
+            bool isBelowScreenBottom = position.Y + radius >= Window.Height + 1;
+            if (isBelowScreenBottom == true)
+            {
+                velocity.Y = -velocity.Y * 0f;
+                position.Y = Window.Height - radius;
+            }
+
+            // Velocity of the cube
+            velocity += forceOfGravity * Time.DeltaTime;
+            position += velocity;
+
+            // Design of the cube
             Draw.FillColor = Color.Yellow;
             Draw.LineColor = Color.Black;
-            Draw.Square(105, 105, 75);
+            Draw.Square(position, radius);
+
+            
         }
     }
 }
