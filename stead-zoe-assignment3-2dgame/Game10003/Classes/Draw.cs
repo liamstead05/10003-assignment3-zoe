@@ -306,6 +306,11 @@ namespace Game10003
         public static void Triangle(Vector2 position1, Vector2 position2, Vector2 position3)
             => Triangle(position1, position2, position3, FillColor, LineSize, LineColor);
 
+        internal static void Rectangle(Vector2 positionplatform, float radiusplatform1)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Methods
