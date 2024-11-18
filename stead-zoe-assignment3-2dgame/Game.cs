@@ -17,15 +17,18 @@ namespace Game10003
         float radiuscube = 50;
         Vector2 velocitycube;
         Vector2 forceOfGravity = new Vector2(0, 10);
-        Vector2 positionplatformtop = new Vector2(1000, 200);
-        Vector2 positionplatformmid = new Vector2(750, 350);
-        Vector2 positionplatformbot = new Vector2(1200, 450);
+        Vector2 positionplatformtophor = new Vector2(1000, 200);
+        Vector2 positionplatformmidhor = new Vector2(750, 350);
+        Vector2 positionplatformbothor = new Vector2(1200, 450);
         float widthplatform = 200;
         float heightplatform = 30;
         Vector2 velocityplatform;
         int speed1 = 200;
         int speed2 = 400;
         int speed3 = 150;
+        Vector2 uiPosition;
+        int score = 0;
+        bool isPlayerAlive = true;
 
         /// <summary>
         ///     Setup runs once before the game loop begins.
@@ -60,6 +63,7 @@ namespace Game10003
                 positioncube.Y = Window.Height - radiuscube;
             }
 
+
             // Velocity of the cube
             velocitycube += forceOfGravity * Time.DeltaTime;
             positioncube += velocitycube;
@@ -76,118 +80,148 @@ namespace Game10003
             Draw.Square(positioncube, radiuscube);
 
             // Does something
-            bool isPassedScreenRight = positionplatformmid.X + widthplatform >= Window.Width + 1;
+            bool isPassedScreenRight = positionplatformmidhor.X + widthplatform >= Window.Width + 1;
             if (isPassedScreenRight == true)
             {
                 velocityplatform.X = velocityplatform.X * 5f;
-                positionplatformmid.X = Window.Width - widthplatform;
+                positionplatformmidhor.X = Window.Width - widthplatform;
             }
 
             // Prevents the middle platform from sinking through the bottom of the screen
-            bool isAboveScreenBottom = positionplatformmid.Y + heightplatform >= Window.Height + 0;
+            bool isAboveScreenBottom = positionplatformmidhor.Y + heightplatform >= Window.Height + 0;
             if (isAboveScreenBottom == true)
             {
                 velocityplatform.Y = -velocityplatform.Y * 0f;
-                positionplatformmid.Y = Window.Height - heightplatform;
+                positionplatformmidhor.Y = Window.Height - heightplatform;
             }
 
             // Velocity of the middle platform
-            positionplatformmid.X -= speed1 * Time.DeltaTime;
+            positionplatformmidhor.X -= speed1 * Time.DeltaTime;
 
             // Collision for the middle platform
-            float leftEdge2 = positionplatformmid.X;
-            float rightEdge2 = positionplatformmid.X + widthplatform;
-            float topEdge2 = positionplatformmid.Y;
-            float bottomEdge2 = positionplatformmid.Y + heightplatform;
+            float leftEdge2 = positionplatformmidhor.X;
+            float rightEdge2 = positionplatformmidhor.X + widthplatform;
+            float topEdge2 = positionplatformmidhor.Y;
+            float bottomEdge2 = positionplatformmidhor.Y + heightplatform;
 
             // Detects the cube in the middle platform
-            bool doesOverlapLeft1 = leftEdge1 < rightEdge2;
-            bool doesOverlapRight1 = rightEdge1 > leftEdge2;
-            bool doesOverlapTop1 = topEdge1 < bottomEdge2;
-            bool doesOverlapBottom1 = bottomEdge1 > topEdge2;\
+            bool doesOverlapLeft1hor = leftEdge1 < rightEdge2;
+            bool doesOverlapRight1hor = rightEdge1 > leftEdge2;
+            bool doesOverlapTop1hor = topEdge1 < bottomEdge2;
+            bool doesOverlapBottom1hor = bottomEdge1 > topEdge2;
 
-            bool doesOverlap1 = doesOverlapLeft1 && doesOverlapRight1 && doesOverlapTop1 && doesOverlapBottom1;
+            bool doesOverlap1hor = doesOverlapLeft1hor && doesOverlapRight1hor && doesOverlapTop1hor && doesOverlapBottom1hor;
 
             // Ends the game if collision detected
-            if (doesOverlap2 == true)
+            if (doesOverlap1hor == true)
             {
-                bool isGameOver();
+                isPlayerAlive = false;
+                positioncube.Y = topEdge2 - 50;
+                positioncube.Y = bottomEdge2 - 50;
+                positioncube.Y = leftEdge2 - 50;
+                positioncube.Y = rightEdge2 - 50;
+                velocitycube.Y = 0;
+                velocityplatform.X = 0;
+                speed1 = 0;
+                speed2 = 0;
+                speed3 = 0;
             }
+
+            Text.Color = Color.Gray;
+            Text.Draw("Score:" + score, uiPosition);
 
             // Design of the middle platform
             Draw.FillColor = Color.Black;
             Draw.LineColor = Color.White;
-            Draw.Rectangle(positionplatformmid.X, positionplatformmid.Y, widthplatform, heightplatform);
+            Draw.Rectangle(positionplatformmidhor.X, positionplatformmidhor.Y, widthplatform, heightplatform);
 
             // Prevents the top platform from sinking through the bottom of the screen
             if (isAboveScreenBottom == true)
             {
                 velocityplatform.Y = -velocityplatform.Y * 0f;
-                positionplatformtop.Y = Window.Height - heightplatform;
+                positionplatformtophor.Y = Window.Height - heightplatform;
             }
 
             // Velocity of the top platform
-            positionplatformtop.X -= speed2 * Time.DeltaTime;
+            positionplatformtophor.X -= speed2 * Time.DeltaTime;
 
             // Collision for the top platform
-            float leftEdge3 = positionplatformtop.X;
-            float rightEdge3 = positionplatformtop.X + widthplatform;
-            float topEdge3 = positionplatformtop.Y;
-            float bottomEdge3 = positionplatformtop.Y + heightplatform;
+            float leftEdge3 = positionplatformtophor.X;
+            float rightEdge3 = positionplatformtophor.X + widthplatform;
+            float topEdge3 = positionplatformtophor.Y;
+            float bottomEdge3 = positionplatformtophor.Y + heightplatform;
 
             // Detects the cube in the top platform
-            bool doesOverlapLeft2 = leftEdge1 < rightEdge3;
-            bool doesOverlapRight2 = rightEdge1 > leftEdge3;
-            bool doesOverlapTop2 = topEdge1 < bottomEdge3;
-            bool doesOverlapBottom2 = bottomEdge1 > topEdge3;
+            bool doesOverlapLeft2hor = leftEdge1 < rightEdge3;
+            bool doesOverlapRight2hor = rightEdge1 > leftEdge3;
+            bool doesOverlapTop2hor = topEdge1 < bottomEdge3;
+            bool doesOverlapBottom2hor = bottomEdge1 > topEdge3;
 
-            bool doesOverlap2 = doesOverlapLeft2 && doesOverlapRight2 && doesOverlapTop2 && doesOverlapBottom2;
+            bool doesOverlap2hor = doesOverlapLeft2hor && doesOverlapRight2hor && doesOverlapTop2hor && doesOverlapBottom2hor;
 
             // Ends the game if collision detected
-            if (doesOverlap2 == true)
+            if (doesOverlap2hor == true)
             {
-                bool isGameOver();
+                isPlayerAlive = false;
+                positioncube.Y = topEdge3 - 50;
+                positioncube.Y = bottomEdge3 - 50;
+                positioncube.Y = leftEdge3 - 50;
+                positioncube.Y = rightEdge3 - 50;
+                velocitycube.Y = 0;
+                velocityplatform.X = 0;
+                speed1 = 0;
+                speed2 = 0;
+                speed3 = 0;
             }
 
             // Design of the top platform
             Draw.FillColor = Color.Black;
             Draw.LineColor = Color.White;
-            Draw.Rectangle(positionplatformtop.X, positionplatformtop.Y, widthplatform, heightplatform);
+            Draw.Rectangle(positionplatformtophor.X, positionplatformtophor.Y, widthplatform, heightplatform);
 
             // Prevents the bottom platform from sinking through the bottom of the screen
             if (isAboveScreenBottom == true)
             {
                 velocityplatform.Y = -velocityplatform.Y * 0f;
-                positionplatformbot.Y = Window.Height - heightplatform;
+                positionplatformbothor.Y = Window.Height - heightplatform;
             }
 
             // Velocity of the bottom platform
-            positionplatformbot.X -= speed3 * Time.DeltaTime;
+            positionplatformbothor.X -= speed3 * Time.DeltaTime;
 
             // Collision of the bottom platform
-            float leftEdge4 = positionplatformbot.X;
-            float rightEdge4 = positionplatformbot.X + widthplatform;
-            float topEdge4 = positionplatformbot.Y;
-            float bottomEdge4 = positionplatformbot.Y + heightplatform;
+            float leftEdge4 = positionplatformbothor.X;
+            float rightEdge4 = positionplatformbothor.X + widthplatform;
+            float topEdge4 = positionplatformbothor.Y;
+            float bottomEdge4 = positionplatformbothor.Y + heightplatform;
 
             // Detects the cube in the bottom platform
-            bool doesOverlapLeft3 = leftEdge1 < rightEdge4;
-            bool doesOverlapRight3 = rightEdge1 > leftEdge4;
-            bool doesOverlapTop3 = topEdge1 < bottomEdge4;
-            bool doesOverlapBottom3 = bottomEdge1 > topEdge4;
+            bool doesOverlapLeft3hor = leftEdge1 < rightEdge4;
+            bool doesOverlapRight3hor = rightEdge1 > leftEdge4;
+            bool doesOverlapTop3hor = topEdge1 < bottomEdge4;
+            bool doesOverlapBottom3hor = bottomEdge1 > topEdge4;
 
-            bool doesOverlap3 = doesOverlapLeft3 && doesOverlapRight3 && doesOverlapTop3 && doesOverlapBottom3;
+            bool doesOverlap3hor = doesOverlapLeft3hor && doesOverlapRight3hor && doesOverlapTop3hor && doesOverlapBottom3hor;
 
             // Ends the game if collision detected
-            if (doesOverlap3 == true)
+            if (doesOverlap3hor == true)
             {
-                bool isGameOver();
-            }    
+                isPlayerAlive = false;
+                positioncube.Y = topEdge4 - 50;
+                positioncube.Y = bottomEdge4 - 50;
+                positioncube.Y = leftEdge4 - 50;
+                positioncube.Y = rightEdge4 - 50;
+                velocitycube.Y = 0;
+                velocityplatform.X = 0;
+                speed1 = 0;
+                speed2 = 0;
+                speed3 = 0;
+            }
 
             // Design of the bottom platform
             Draw.FillColor = Color.Black;
             Draw.LineColor = Color.White;
-            Draw.Rectangle(positionplatformbot.X, positionplatformbot.Y, widthplatform, heightplatform);
+            Draw.Rectangle(positionplatformbothor.X, positionplatformbothor.Y, widthplatform, heightplatform);
 
         }
     }
