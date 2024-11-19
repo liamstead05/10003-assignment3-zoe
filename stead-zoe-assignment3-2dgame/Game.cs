@@ -47,10 +47,11 @@ namespace Game10003
 
 
             // Allows the player to control the cube's jump
-            if (Input.IsMouseButtonPressed(MouseInput.Left))
+            if (Input.IsMouseButtonPressed(MouseInput.Left) || Input.IsKeyboardKeyPressed(KeyboardInput.Space))
             {
                 velocitycube.Y = -5;
             }
+
 
             // Prevents the cube from sinking through the bottom of the screen
             bool isBelowScreenBottom = positioncube.Y + radiuscube >= Window.Height + 1;
@@ -58,6 +59,13 @@ namespace Game10003
             {
                 velocitycube.Y = -velocitycube.Y * 0f;
                 positioncube.Y = Window.Height - radiuscube;
+            }
+
+            bool isAboveScreenTop = positioncube.Y + radiuscube >= Window.Height + 1;
+            if (isAboveScreenTop == true)
+            {
+                velocitycube.Y = -velocitycube.Y * 0f;
+                positioncube.Y = Window.Height + radiuscube;
             }
 
             // Velocity of the cube
